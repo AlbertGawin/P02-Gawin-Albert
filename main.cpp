@@ -13,12 +13,12 @@ void spirala(int test[5][5], int M, int N) {
 
     int licznik = M*N;
 
-    // --- Wykonuj dopóki licznik jest wiêkszy od 0 ---
+    // --- Wykonuj dopoki licznik jest wiekszy od 0 ---
     while(licznik--) {
-        // --- Wypisanie komórki ---
+        // --- Wypisanie komorki ---
         cout << test[biegacz[0]][biegacz[1]] << " ";
 
-        // --- Sprawdzenie czy biegacz dotar³ do mety, nastêpnie ustawienie nowej mety ---
+        // --- Sprawdzenie czy biegacz dotarl do mety, nastepnie ustawienie nowej mety ---
         if (biegacz[0] == dolny_rog[0] && biegacz[1] == dolny_rog[1]) {
             meta[0] = gorny_rog[0];
             meta[1] = gorny_rog[1];
@@ -33,7 +33,7 @@ void spirala(int test[5][5], int M, int N) {
             gorny_rog[1]++;
         }
 
-        // --- Skrypt biegu a¿ do mety ---
+        // --- Skrypt biegu az do mety ---
         if(biegacz[1] < meta[1]) {
             biegacz[1]++;
         } else if(biegacz[0] < meta[0]) {
