@@ -1,42 +1,47 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
 void spirala(int test[5][5], int M, int N) {
 
-    int p[2] = {0, 0};
-    int q[2] = {M-1, N-1};
+    // --- Inicjacja zmiennych ---
+    int biegacz[2] = {0, 0};
+    int meta[2] = {M-1, N-1};
+
+    int gorny_rog[2] = {1,0};
+    int dolny_rog[2] = {M-1, N-1};
+
     int licznik = M*N;
 
-    int _start[2] = {1,0};
-    int _stop[2] = {M-1, N-1};
-
+    // --- Wykonuj dopóki licznik jest wiêkszy od 0 ---
     while(licznik--) {
-        cout << test[p[0]][p[1]] << " ";
+        // --- Wypisanie komórki ---
+        cout << test[biegacz[0]][biegacz[1]] << " ";
 
-        if (p[0] == _stop[0] && p[1] == _stop[1]) {
-            q[0] = _start[0];
-            q[1] = _start[1];
+        // --- Sprawdzenie czy biegacz dotar³ do mety, nastêpnie ustawienie nowej mety ---
+        if (biegacz[0] == dolny_rog[0] && biegacz[1] == dolny_rog[1]) {
+            meta[0] = gorny_rog[0];
+            meta[1] = gorny_rog[1];
 
-            _stop[0]--;
-            _stop[1]--;
-        } else if(p[0] == _start[0] && p[1] == _start[1]) {
-            q[0] = _stop[0];
-            q[1] = _stop[1];
+            dolny_rog[0]--;
+            dolny_rog[1]--;
+        } else if(biegacz[0] == gorny_rog[0] && biegacz[1] == gorny_rog[1]) {
+            meta[0] = dolny_rog[0];
+            meta[1] = dolny_rog[1];
 
-            _start[0]++;
-            _start[1]++;
+            gorny_rog[0]++;
+            gorny_rog[1]++;
         }
 
-        if(p[1] < q[1]) {
-            p[1]++;
-        } else if(p[0] < q[0]) {
-            p[0]++;
-        } else if (p[1] > q[1]) {
-            p[1]--;
-        } else if (p[0] > q[0]) {
-            p[0]--;
+        // --- Skrypt biegu a¿ do mety ---
+        if(biegacz[1] < meta[1]) {
+            biegacz[1]++;
+        } else if(biegacz[0] < meta[0]) {
+            biegacz[0]++;
+        } else if (biegacz[1] > meta[1]) {
+            biegacz[1]--;
+        } else if (biegacz[0] > meta[0]) {
+            biegacz[0]--;
         }
     }
 }
