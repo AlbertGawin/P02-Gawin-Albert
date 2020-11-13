@@ -3,16 +3,30 @@
 
 using namespace std;
 
-void spirala(int tab[], int M, int N) {
+int** getMatrixFromFile(string path, int& M, int& N) {
 
-    int tablica[M][N];
+    fstream file(path, ios::in);
+    int** matrix;
 
-    // --- Zmiana tablicy jednowymiarowej na dwuwymiarow¹ ---
-    for(int i=0; i<M; i++) {
-        for(int j=0; j<N; j++) {
-            tablica[i][j] = tab[i*N + j];
+    if(file.good()) {
+        file >> M >> N;
+        matrix = new int*[M];
+
+        for(int i=0; i<M; i++) {
+            matrix[i] = new int[N];
+            for(int j=0; j<N; j++) {
+                file >> matrix[i][j];
+            }
         }
     }
+    file.close();
+
+    return matrix;
+}
+
+int* getResultOfSpiral(int** matrix, int M, int N) {
+
+    int* result = new int[M*N];
 
     // --- Inicjacja zmiennych ---
     int biegacz[2] = {0, 0};
@@ -28,7 +42,7 @@ void spirala(int tab[], int M, int N) {
     while(licznik--) {
 
         // --- Zapisanie wyniku do tab ---
-        tab[i] = tablica[biegacz[0]][biegacz[1]];
+        result[i] = matrix[biegacz[0]][biegacz[1]];
 
         // --- Sprawdzenie czy biegacz dotarl do mety, nastepnie ustawienie nowej mety ---
         if (biegacz[0] == dolny_rog[0] && biegacz[1] == dolny_rog[1]) {
@@ -58,41 +72,34 @@ void spirala(int tab[], int M, int N) {
 
         i++;
     }
+
+    return result;
 }
 
-void zapiszDoPliku(int tab[], int M, int N) {
+void saveToFile(int* tab, int M, int N, int k) {
 
-    fstream wynik("wynik.txt", ios::out | ios::app);
+    fstream result("wynik.txt", ios::out | ios::app);
 
+    result << "WYNIK [" << k << "]: ";
     for(int i=0; i<M*N; i++) {
-        wynik << tab[i] << " ";
+        result << tab[i] << " ";
     }
-    wynik << "\n\n";
+    result << "\n\n";
 
-    wynik.close();
+    result.close();
 }
 
 int main() {
 
-    fstream plik("tablice.txt", ios::in);
-    int M=0, N=0;
-    int *tab;
+    int** matrix;
+    int* result;
+    int matrixN = 10, M=0, N=0;
 
-    if(plik.good()) {
-        while(plik >> M >> N) {
-            tab = new int[M*N];
-
-            for(int i=0; i<M*N; i++) {
-                plik >> tab[i];
-            }
-
-            spirala(tab, M, N);
-            zapiszDoPliku(tab, M, N);
-
-            delete[] tab;
-        }
+    for(int i=1; i<=matrixN; i++) {
+        matrix = getMatrixFromFile("macierze/"+ to_string(i) +".txt", M, N);
+        result = getResultOfSpiral(matrix, M, N);
+        saveToFile(result, M, N, i);
     }
-    plik.close();
 
     return 0;
 }
