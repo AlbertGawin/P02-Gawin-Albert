@@ -6,17 +6,13 @@ using namespace std;
 void spirala(int tab[], int M, int N) {
 
     int tablica[M][N];
-    // --- Zmiana tablicy jednowymiarowej na dwuwymiarow¹ ---
-    cout << "Dla tablicy [" << M << ", " << N << "]" << endl;
 
+    // --- Zmiana tablicy jednowymiarowej na dwuwymiarow¹ ---
     for(int i=0; i<M; i++) {
         for(int j=0; j<N; j++) {
             tablica[i][j] = tab[i*N + j];
-            cout << tablica[i][j] << " ";
         }
-        cout << endl;
     }
-    cout << endl;
 
     // --- Inicjacja zmiennych ---
     int biegacz[2] = {0, 0};
@@ -26,13 +22,13 @@ void spirala(int tab[], int M, int N) {
     int dolny_rog[2] = {M-1, N-1};
 
     int licznik = M*N;
+    int i=0;
 
     // --- Wykonuj dopoki licznik jest wiekszy od 0 ---
-    cout << "Wyszlo: ";
-
     while(licznik--) {
-        // --- Wypisanie komorki ---
-        cout << tablica[biegacz[0]][biegacz[1]] << " ";
+
+        // --- Zapisanie wyniku do tab ---
+        tab[i] = tablica[biegacz[0]][biegacz[1]];
 
         // --- Sprawdzenie czy biegacz dotarl do mety, nastepnie ustawienie nowej mety ---
         if (biegacz[0] == dolny_rog[0] && biegacz[1] == dolny_rog[1]) {
@@ -59,14 +55,26 @@ void spirala(int tab[], int M, int N) {
         } else if (biegacz[0] > meta[0]) {
             biegacz[0]--;
         }
-    }
 
-    cout << "\n\n\n";
+        i++;
+    }
+}
+
+void zapiszDoPliku(int tab[], int M, int N) {
+
+    fstream wynik("wynik.txt", ios::out | ios::app);
+
+    for(int i=0; i<M*N; i++) {
+        wynik << tab[i] << " ";
+    }
+    wynik << "\n\n";
+
+    wynik.close();
 }
 
 int main() {
 
-    std::fstream plik("tablice.txt");
+    fstream plik("tablice.txt", ios::in);
     int M=0, N=0;
     int *tab;
 
@@ -79,6 +87,7 @@ int main() {
             }
 
             spirala(tab, M, N);
+            zapiszDoPliku(tab, M, N);
 
             delete[] tab;
         }
