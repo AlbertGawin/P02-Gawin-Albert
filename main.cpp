@@ -1,8 +1,22 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
-void spirala(int test[5][5], int M, int N) {
+void spirala(int tab[], int M, int N) {
+
+    int tablica[M][N];
+    // --- Zmiana tablicy jednowymiarowej na dwuwymiarow¹ ---
+    cout << "Dla tablicy [" << M << ", " << N << "]" << endl;
+
+    for(int i=0; i<M; i++) {
+        for(int j=0; j<N; j++) {
+            tablica[i][j] = tab[i*N + j];
+            cout << tablica[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
 
     // --- Inicjacja zmiennych ---
     int biegacz[2] = {0, 0};
@@ -14,9 +28,11 @@ void spirala(int test[5][5], int M, int N) {
     int licznik = M*N;
 
     // --- Wykonuj dopoki licznik jest wiekszy od 0 ---
+    cout << "Wyszlo: ";
+
     while(licznik--) {
         // --- Wypisanie komorki ---
-        cout << test[biegacz[0]][biegacz[1]] << " ";
+        cout << tablica[biegacz[0]][biegacz[1]] << " ";
 
         // --- Sprawdzenie czy biegacz dotarl do mety, nastepnie ustawienie nowej mety ---
         if (biegacz[0] == dolny_rog[0] && biegacz[1] == dolny_rog[1]) {
@@ -44,22 +60,30 @@ void spirala(int test[5][5], int M, int N) {
             biegacz[0]--;
         }
     }
+
+    cout << "\n\n\n";
 }
 
 int main() {
 
-    int test[5][5] = {
-        {1,2,3,4,5},
-        {16,17,18,19,6},
-        {15,24,25,20,7},
-        {14,23,22,21,8},
-        {13,12,11,10,9},
-    };
+    std::fstream plik("tablice.txt");
+    int M=0, N=0;
+    int *tab;
 
-    int M = sizeof(test)/sizeof(test[0]);
-    int N = sizeof(test)/sizeof(test[0][0]) / M;
+    if(plik.good()) {
+        while(plik >> M >> N) {
+            tab = new int[M*N];
 
-    spirala(test, M, N);
+            for(int i=0; i<M*N; i++) {
+                plik >> tab[i];
+            }
+
+            spirala(tab, M, N);
+
+            delete[] tab;
+        }
+    }
+    plik.close();
 
     return 0;
 }
