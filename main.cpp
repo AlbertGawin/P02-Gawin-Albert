@@ -93,7 +93,7 @@ void saveToFile(int* tab, int M, int N, int k) {
         file.open("wynik.txt", ios::out | ios::app);
     }
 
-    file << "WYNIK [" << k << "]: ";
+    file << "WYNIK [" << k << ".txt]: ";
     for(int i=0; i<M*N; i++) {
         file << tab[i] << " ";
     }
