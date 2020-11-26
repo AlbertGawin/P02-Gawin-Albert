@@ -35,11 +35,11 @@ int* getResultOfSpiral(int** matrix, int M, int N) {
     int* result = new int[M*N];
 
     // Inicjacja zmiennych
-    int biegacz[2] = {0, 0};
-    int meta[2] = {M-1, N-1};
+    int runner[2] = {0, 0};
+    int finish[2] = {M-1, N-1};
 
-    int gorny_rog[2] = {1,0};
-    int dolny_rog[2] = {M-1, N-1};
+    int up_corner[2] = {1,0};
+    int down_corner[2] = {M-1, N-1};
 
     int i = 0;
 
@@ -47,33 +47,33 @@ int* getResultOfSpiral(int** matrix, int M, int N) {
     while(i < M*N) {
 
         // Zapisanie wyniku do [result]
-        result[i] = matrix[biegacz[0]][biegacz[1]];
+        result[i] = matrix[runner[0]][runner[1]];
 
-        /* Sprawdzenie czy [biegacz] dotarl do [meta],
+        /* Sprawdzenie czy [runner] dotarl do [finish],
             nastepnie ustawienie nowej mety */
-        if (biegacz[0] == dolny_rog[0] && biegacz[1] == dolny_rog[1]) {
-            meta[0] = gorny_rog[0];
-            meta[1] = gorny_rog[1];
+        if (runner[0] == down_corner[0] && runner[1] == down_corner[1]) {
+            finish[0] = up_corner[0];
+            finish[1] = up_corner[1];
 
-            dolny_rog[0]--;
-            dolny_rog[1]--;
-        } else if(biegacz[0] == gorny_rog[0] && biegacz[1] == gorny_rog[1]) {
-            meta[0] = dolny_rog[0];
-            meta[1] = dolny_rog[1];
+            down_corner[0]--;
+            down_corner[1]--;
+        } else if(runner[0] == up_corner[0] && runner[1] == up_corner[1]) {
+            finish[0] = down_corner[0];
+            finish[1] = down_corner[1];
 
-            gorny_rog[0]++;
-            gorny_rog[1]++;
+            up_corner[0]++;
+            up_corner[1]++;
         }
 
-        // Skrypt biegu az do [meta]
-        if(biegacz[1] < meta[1]) {
-            biegacz[1]++;
-        } else if(biegacz[0] < meta[0]) {
-            biegacz[0]++;
-        } else if (biegacz[1] > meta[1]) {
-            biegacz[1]--;
-        } else if (biegacz[0] > meta[0]) {
-            biegacz[0]--;
+        // Skrypt biegu az do [finish]
+        if(runner[1] < finish[1]) {
+            runner[1]++;
+        } else if(runner[0] < finish[0]) {
+            runner[0]++;
+        } else if (runner[1] > finish[1]) {
+            runner[1]--;
+        } else if (runner[0] > finish[0]) {
+            runner[0]--;
         }
 
         i++;
@@ -82,7 +82,7 @@ int* getResultOfSpiral(int** matrix, int M, int N) {
     return result;
 }
 
-void saveToFile(int* tab, int M, int N, int k) {
+void saveMatrixToFile(int* tab, int M, int N, int k) {
 
     /* Przy pierwszej iteracji stworz nowy plik,
         przy nastepnych iteracjach dopisuj */
@@ -108,7 +108,7 @@ int main() {
         GDZIE [cyfra] NALEZY DO ZBIORU LICZB CALKOWITYCH */
 
     /* SKRYPT NIE OBSLUGUJE DYNAMICZNEGO ODCZYTYWANIA ILOSCI PLIKOW,
-        PROSZE O ZMIANE ZMIENNEJ [numberOfFiles] JESLI DODANO/USUNIETO PLIKI */
+        PROSZE O ZMIANE ZMIENNEJ [numberOfFiles] JESLI DODANO PLIKI */
     int numberOfFiles = 10;
 
     int** matrix;
@@ -126,7 +126,7 @@ int main() {
         result = getResultOfSpiral(matrix, M, N);
 
         // Zapisuje [result] do pliku "wynik.txt"
-        saveToFile(result, M, N, i);
+        saveMatrixToFile(result, M, N, i);
     }
 
     return 0;
